@@ -24,9 +24,9 @@ type (
 
 	getTransactionsResp struct {
 		APIResponse
-		Unspent        siatypes.Currency     `json:"unspent_total"`
-		UnspentOutputs []types.SiacoinOutput `json:"unspent_outputs"`
-		Transactions   []types.Transaction   `json:"transactions"`
+		Unspent        siatypes.Currency         `json:"unspent_total"`
+		UnspentOutputs []types.SiacoinOutput     `json:"unspent_outputs"`
+		Transactions   []types.WalletTransaction `json:"transactions"`
 	}
 )
 
@@ -53,7 +53,7 @@ func GetTransactionFees() (min, max, internal siatypes.Currency, err error) {
 }
 
 //FindAddressBalance gets all unspent outputs and the last n transactions for a list of addresses
-func FindAddressBalance(limit, page int, addresses []string) (unspent siatypes.Currency, outputs []types.SiacoinOutput, transactions []types.Transaction, err error) {
+func FindAddressBalance(limit, page int, addresses []string) (unspent siatypes.Currency, outputs []types.SiacoinOutput, transactions []types.WalletTransaction, err error) {
 	var resp getTransactionsResp
 
 	if len(addresses) > 10000 {
@@ -109,7 +109,7 @@ func FindUsedAddresses(addresses []string) (used []string, err error) {
 }
 
 //GetAddressBalance gets all unspent outputs and the last n transactions of an address
-func GetAddressBalance(limit, page int, address string) (unspent siatypes.Currency, outputs []types.SiacoinOutput, transactions []types.Transaction, err error) {
+func GetAddressBalance(limit, page int, address string) (unspent siatypes.Currency, outputs []types.SiacoinOutput, transactions []types.WalletTransaction, err error) {
 	var resp getTransactionsResp
 
 	code, err := makeAPIRequest(HTTPGet, fmt.Sprintf("/wallet/addresses/%s", address), nil, &resp)
