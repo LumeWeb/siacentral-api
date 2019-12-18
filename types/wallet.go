@@ -3,6 +3,12 @@ package types
 import "time"
 
 type (
+	//AddressUsage AddressUsage
+	AddressUsage struct {
+		Address   string `json:"address"`
+		UsageType string `json:"usage_type"`
+	}
+
 	//WalletTransaction SiacoinTransaction
 	WalletTransaction struct {
 		TransactionID  string          `json:"transaction_id"`
