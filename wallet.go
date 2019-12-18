@@ -12,7 +12,7 @@ import (
 type (
 	getAddressesResp struct {
 		APIResponse
-		Addresses []string `json:"addresses"`
+		Addresses []types.AddressUsage `json:"addresses"`
 	}
 
 	getFeesResp struct {
@@ -82,7 +82,7 @@ func FindAddressBalance(limit, page int, addresses []string) (unspent siatypes.C
 }
 
 //FindUsedAddresses gets all addresses that have been seen in a transaction on the blockchain
-func FindUsedAddresses(addresses []string) (used []string, err error) {
+func FindUsedAddresses(addresses []string) (used []types.AddressUsage, err error) {
 	var resp getAddressesResp
 
 	if len(addresses) > 10000 {
