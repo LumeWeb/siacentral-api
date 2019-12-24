@@ -106,9 +106,7 @@ func FindUsedAddresses(addresses []string) (used []types.AddressUsage, err error
 }
 
 //GetAddressBalance gets all unspent outputs and the last n transactions of an address
-func GetAddressBalance(limit, page int, address string) (unspent siatypes.Currency, outputs []types.SiacoinOutput, transactions []types.WalletTransaction, unconfirmedOutputs []types.SiacoinOutput, unconfirmedInputs []types.SiacoinInput, err error) {
-	var resp getTransactionsResp
-
+func GetAddressBalance(limit, page int, address string) (resp GetTransactionsResp, err error) {
 	code, err := makeAPIRequest(HTTPGet, fmt.Sprintf("/wallet/addresses/%s", address), nil, &resp)
 
 	if err != nil {
@@ -119,12 +117,6 @@ func GetAddressBalance(limit, page int, address string) (unspent siatypes.Curren
 		err = errors.New(resp.Message)
 		return
 	}
-
-	unspent = resp.Unspent
-	outputs = resp.UnspentOutputs
-	transactions = resp.Transactions
-	unconfirmedInputs = resp.UnconfirmedInputs
-	unconfirmedOutputs = resp.UnconfirmedOutputs
 
 	return
 }
