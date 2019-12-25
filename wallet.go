@@ -25,11 +25,10 @@ type (
 	//GetTransactionsResp holds balance and transactions for an address or set of addresses
 	GetTransactionsResp struct {
 		APIResponse
-		Unspent            siatypes.Currency         `json:"unspent_total"`
-		UnspentOutputs     []types.SiacoinOutput     `json:"unspent_outputs"`
-		UnconfirmedOutputs []types.SiacoinOutput     `json:"unconfirmed_outputs"`
-		UnconfirmedInputs  []types.SiacoinInput      `json:"unconfirmed_inputs"`
-		Transactions       []types.WalletTransaction `json:"transactions"`
+		Unspent                 siatypes.Currency         `json:"unspent_total"`
+		UnspentOutputs          []types.SiacoinOutput     `json:"unspent_outputs"`
+		Transactions            []types.WalletTransaction `json:"transactions"`
+		UnconfirmedTransactions []types.WalletTransaction `json:"unconfirmed_transactions"`
 	}
 )
 

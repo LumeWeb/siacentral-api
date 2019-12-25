@@ -13,6 +13,7 @@ type (
 	WalletTransaction struct {
 		TransactionID  string          `json:"transaction_id"`
 		BlockHeight    uint64          `json:"block_height"`
+		Confirmations  uint64          `json:"confirmations"`
 		SiacoinOutputs []SiacoinOutput `json:"siacoin_outputs"`
 		SiacoinInputs  []SiacoinInput  `json:"siacoin_inputs"`
 		SiafundInputs  []SiafundInput  `json:"siafund_inputs"`
