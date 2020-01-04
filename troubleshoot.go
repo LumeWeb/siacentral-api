@@ -3,7 +3,7 @@ package apiclient
 import (
 	"errors"
 
-	"github.com/siacentral/apiclient/types"
+	"github.com/siacentral/api-sdk-go/types"
 )
 
 type (

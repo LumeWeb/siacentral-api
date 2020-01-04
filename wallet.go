@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/siacentral/apiclient/types"
+	"github.com/siacentral/api-sdk-go/types"
 
 	siatypes "gitlab.com/NebulousLabs/Sia/types"
 )

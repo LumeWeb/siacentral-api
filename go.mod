@@ -1,4 +1,4 @@
-module github.com/siacentral/apiclient
+module github.com/siacentral/api-sdk-go
 
 go 1.13
 
