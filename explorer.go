@@ -1,10 +1,10 @@
-package main
+package apisdkgo
 
 import (
 	"errors"
 	"fmt"
 
-	"github.com/siacentral/api-sdk-go/types"
+	"github.com/siacentral/apisdkgo/types"
 )
 
 type (

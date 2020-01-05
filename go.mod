@@ -1,4 +1,4 @@
-module github.com/siacentral/api-sdk-go
+module github.com/siacentral/apisdkgo
 
 go 1.13
 
