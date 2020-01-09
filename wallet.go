@@ -63,7 +63,7 @@ func FindAddressBalance(limit, page int, addresses []string) (resp GetTransactio
 		return
 	}
 
-	code, err := makeAPIRequest(HTTPPost, fmt.Sprintf("/addresses?limit=%d&page=%d", limit, page), map[string]interface{}{
+	code, err := makeAPIRequest(HTTPPost, fmt.Sprintf("/wallet/addresses?limit=%d&page=%d", limit, page), map[string]interface{}{
 		"addresses": addresses,
 	}, &resp)
 
@@ -88,7 +88,7 @@ func FindUsedAddresses(addresses []string) (used []types.AddressUsage, err error
 		return
 	}
 
-	code, err := makeAPIRequest(HTTPPost, "/addresses/used", map[string]interface{}{
+	code, err := makeAPIRequest(HTTPPost, "/wallet/addresses/used", map[string]interface{}{
 		"addresses": addresses,
 	}, &resp)
 
@@ -108,7 +108,7 @@ func FindUsedAddresses(addresses []string) (used []types.AddressUsage, err error
 
 //GetAddressBalance gets all unspent outputs and the last n transactions of an address
 func GetAddressBalance(limit, page int, address string) (resp GetTransactionsResp, err error) {
-	code, err := makeAPIRequest(HTTPGet, fmt.Sprintf("/addresses/%s", address), nil, &resp)
+	code, err := makeAPIRequest(HTTPGet, fmt.Sprintf("/wallet/addresses/%s", address), nil, &resp)
 
 	if err != nil {
 		return
@@ -122,5 +122,5 @@ func GetAddressBalance(limit, page int, address string) (resp GetTransactionsRes
 	return
 }
 
-//Method:  "POST",
-//Pattern: "/broadcast",
+//Method:  "POST"
+//Pattern: "/wallet/broadcast"
