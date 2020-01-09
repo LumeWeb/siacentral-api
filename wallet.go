@@ -25,10 +25,12 @@ type (
 	//GetTransactionsResp holds balance and transactions for an address or set of addresses
 	GetTransactionsResp struct {
 		APIResponse
-		Unspent                 siatypes.Currency         `json:"unspent_total"`
-		UnspentOutputs          []types.SiacoinOutput     `json:"unspent_outputs"`
-		Transactions            []types.WalletTransaction `json:"transactions"`
-		UnconfirmedTransactions []types.WalletTransaction `json:"unconfirmed_transactions"`
+		UnspentSiacoins         siatypes.Currency     `json:"unspent_siacoins"`
+		UnspentSiafunds         siatypes.Currency     `json:"unspent_siafunds"`
+		UnspentSiacoinOutputs   []types.SiacoinOutput `json:"unspent_siacoin_outputs"`
+		UnspentSiafundOutputs   []types.SiafundOutput `json:"unspent_siafund_outputs"`
+		Transactions            []types.Transaction   `json:"transactions"`
+		UnconfirmedTransactions []types.Transaction   `json:"unconfirmed_transactions"`
 	}
 )
 
@@ -36,7 +38,7 @@ type (
 func GetTransactionFees() (min, max, internal siatypes.Currency, err error) {
 	var resp getFeesResp
 
-	code, err := makeAPIRequest(HTTPGet, "/wallet/fees", nil, &resp)
+	code, err := makeAPIRequest(HTTPGet, "/fees", nil, &resp)
 
 	if err != nil {
 		return
@@ -61,7 +63,7 @@ func FindAddressBalance(limit, page int, addresses []string) (resp GetTransactio
 		return
 	}
 
-	code, err := makeAPIRequest(HTTPPost, fmt.Sprintf("/wallet/addresses?limit=%d&page=%d", limit, page), map[string]interface{}{
+	code, err := makeAPIRequest(HTTPPost, fmt.Sprintf("/addresses?limit=%d&page=%d", limit, page), map[string]interface{}{
 		"addresses": addresses,
 	}, &resp)
 
@@ -86,7 +88,7 @@ func FindUsedAddresses(addresses []string) (used []types.AddressUsage, err error
 		return
 	}
 
-	code, err := makeAPIRequest(HTTPPost, "/wallet/addresses/used", map[string]interface{}{
+	code, err := makeAPIRequest(HTTPPost, "/addresses/used", map[string]interface{}{
 		"addresses": addresses,
 	}, &resp)
 
@@ -106,7 +108,7 @@ func FindUsedAddresses(addresses []string) (used []types.AddressUsage, err error
 
 //GetAddressBalance gets all unspent outputs and the last n transactions of an address
 func GetAddressBalance(limit, page int, address string) (resp GetTransactionsResp, err error) {
-	code, err := makeAPIRequest(HTTPGet, fmt.Sprintf("/wallet/addresses/%s", address), nil, &resp)
+	code, err := makeAPIRequest(HTTPGet, fmt.Sprintf("/addresses/%s", address), nil, &resp)
 
 	if err != nil {
 		return

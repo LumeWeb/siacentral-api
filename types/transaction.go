@@ -11,8 +11,11 @@ type (
 	Transaction struct {
 		ID                    string                 `json:"id"`
 		BlockID               string                 `json:"block_id"`
-		BlockHeight           uint64                 `json:"block_height"`
-		ArbitraryData         [][]byte               `json:"arbitrary_data"`
+		BlockHeight           uint64                 `json:"block_height,omitempty"`
+		Confirmations         uint64                 `json:"confirmations"`
+		BlockIndex            int                    `json:"-"`
+		Timestamp             time.Time              `json:"timestamp"`
+		Fees                  siatypes.Currency      `json:"fees"`
 		SiacoinInputs         []SiacoinInput         `json:"siacoin_inputs"`
 		SiacoinOutputs        []SiacoinOutput        `json:"siacoin_outputs"`
 		SiafundInputs         []SiafundInput         `json:"siafund_inputs"`
@@ -22,8 +25,8 @@ type (
 		StorageProofs         []StorageProof         `json:"storage_proofs"`
 		MinerFees             []siatypes.Currency    `json:"miner_fees"`
 		HostAnnouncements     []Announcement         `json:"host_announcements"`
+		ArbitraryData         [][]byte               `json:"arbitrary_data"`
 		TransactionSignatures []TransactionSignature `json:"transaction_signatures"`
-		Timestamp             time.Time              `json:"timestamp"`
 	}
 
 	//UnlockCondition unlock conditions of a transaction input
