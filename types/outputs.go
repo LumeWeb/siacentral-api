@@ -33,6 +33,7 @@ type (
 	//SiafundInput an input of siafunds for a transaction
 	SiafundInput struct {
 		SiafundOutput
+		ClaimUnlockHash  string          `json:"claim_unlock_hash"`
 		UnlockConditions UnlockCondition `json:"unlock_conditions"`
 	}
 )
