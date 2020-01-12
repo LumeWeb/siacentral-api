@@ -6,11 +6,12 @@ import (
 
 type getPriceResp struct {
 	APIResponse
-	Rates map[string]float64 `json:"price"`
+	Siacoin map[string]float64 `json:"siacoin"`
+	Siafund map[string]float64 `json:"siafund"`
 }
 
-//GetSiacoinExchangeRate gets the current market exchange rate for Siacoin
-func GetSiacoinExchangeRate() (rates map[string]float64, err error) {
+//GetExchangeRate gets the current market exchange rate for Siacoin and Siafund
+func GetExchangeRate() (siacoin map[string]float64, siafund map[string]float64, err error) {
 	var resp getPriceResp
 
 	code, err := makeAPIRequest(HTTPGet, "/market/exchange-rate", nil, &resp)
@@ -24,7 +25,8 @@ func GetSiacoinExchangeRate() (rates map[string]float64, err error) {
 		return
 	}
 
-	rates = resp.Rates
+	siacoin = resp.Siacoin
+	siafund = resp.Siafund
 
 	return
 }
