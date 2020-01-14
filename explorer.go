@@ -222,7 +222,7 @@ func FindContractsByID(ids ...string) (contracts []types.StorageContract, err er
 	}
 
 	code, err := makeAPIRequest(HTTPPost, "/explorer/contracts", map[string]interface{}{
-		"contract_ids": ids,
+		"contracts": ids,
 	}, &resp)
 
 	if err != nil {
