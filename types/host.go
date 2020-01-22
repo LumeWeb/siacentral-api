@@ -19,19 +19,21 @@ type (
 
 	//HostInfo information about a host in the database
 	HostInfo struct {
-		PublicKey   string                `json:"public_key"`
-		NetAddress  string                `json:"net_address"`
-		ConnectedIP string                `json:"connected_ip"`
-		Latency     time.Duration         `json:"latency"`
-		LastScan    time.Time             `json:"last_scan"`
-		Settings    *HostExternalSettings `json:"settings"`
+		NetAddress         string                `json:"net_address"`
+		PublicKey          string                `json:"public_key"`
+		ResolvedIP         string                `json:"connected_ip"`
+		Latency            time.Duration         `json:"latency"`
+		FirstSeenHeight    uint64                `json:"first_seen_height"`
+		FirstSeenTimestamp time.Time             `json:"first_seen_timestamp"`
+		LastScan           time.Time             `json:"last_scan"`
+		Announcements      []Announcement        `json:"announcements,omitempty"`
+		Settings           *HostExternalSettings `json:"settings"`
 	}
 
 	//HostDetails additional details about a host from the database
 	HostDetails struct {
 		HostInfo
-		ResolvedIPs   []string       `json:"resolved_ips,omitempty"`
-		Announcements []Announcement `json:"announcements,omitempty"`
+		ResolvedIPs []string `json:"resolved_ips,omitempty"`
 	}
 
 	//HostConfig the settings pulled from the host during a scan
