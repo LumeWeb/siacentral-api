@@ -38,7 +38,7 @@ type (
 func GetTransactionFees() (min, max, internal siatypes.Currency, err error) {
 	var resp getFeesResp
 
-	code, err := makeAPIRequest(HTTPGet, "/fees", nil, &resp)
+	code, err := makeAPIRequest(HTTPGet, "/wallet/fees", nil, &resp)
 
 	if err != nil {
 		return
