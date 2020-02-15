@@ -2,6 +2,8 @@ package apisdkgo
 
 import (
 	"errors"
+	"fmt"
+	"net/url"
 
 	"github.com/siacentral/apisdkgo/types"
 )
@@ -17,7 +19,7 @@ type (
 func GetHostConnectivity(netaddress string) (report types.ConnectionReport, err error) {
 	var resp getConnectionResp
 
-	code, err := makeAPIRequest(HTTPGet, "/market/exchange-rate", nil, &resp)
+	code, err := makeAPIRequest(HTTPGet, fmt.Sprintf("troubleshoot/%s", url.PathEscape(netaddress)), nil, &resp)
 
 	if err != nil {
 		return
