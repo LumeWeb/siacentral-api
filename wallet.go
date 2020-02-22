@@ -122,5 +122,22 @@ func GetAddressBalance(limit, page int, address string) (resp GetTransactionsRes
 	return
 }
 
-//Method:  "POST"
-//Pattern: "/wallet/broadcast"
+//Broadcast broadcasts the transaction to the network
+func Broadcast(txn siatypes.Transaction) (err error) {
+	var resp APIResponse
+
+	code, err := makeAPIRequest(HTTPPost, "/wallet/broadcast", map[string]interface{}{
+		"tranasction": txn,
+	}, &resp)
+
+	if err != nil {
+		return
+	}
+
+	if code < 200 || code >= 300 || resp.Type != "success" {
+		err = errors.New(resp.Message)
+		return
+	}
+
+	return
+}
