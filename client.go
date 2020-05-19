@@ -24,7 +24,7 @@ const (
 
 var (
 	client = http.Client{
-		Timeout: 10 * time.Second,
+		Timeout: 30 * time.Second,
 	}
 )
 
