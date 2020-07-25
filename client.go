@@ -10,10 +10,6 @@ import (
 	"time"
 )
 
-const apiBaseAddress = "https://api.siacentral.com/v2"
-
-/*
- */
 const (
 	HTTPPost   HTTPMethod = "POST"
 	HTTPGet    HTTPMethod = "GET"
@@ -23,7 +19,7 @@ const (
 )
 
 var (
-	client = http.Client{
+	client = &http.Client{
 		Timeout: 30 * time.Second,
 	}
 )
@@ -33,8 +29,9 @@ type (
 	HTTPMethod string
 	//APIClient a client used to access the Sia Central API
 	APIClient struct {
-		AccessKey string
-		AuthToken string
+		BaseAddress string
+		AccessKey   string
+		AuthToken   string
 	}
 
 	//APIResponse APIResponse
@@ -49,11 +46,11 @@ func drainAndClose(rc io.ReadCloser) {
 	rc.Close()
 }
 
-func makeAPIRequest(method HTTPMethod, url string, body interface{}, value interface{}) (statusCode int, err error) {
+func (a *APIClient) makeAPIRequest(method HTTPMethod, url string, body interface{}, value interface{}) (statusCode int, err error) {
 	var req *http.Request
 
 	if !strings.HasPrefix(url, "http") {
-		url = apiBaseAddress + url
+		url = a.BaseAddress + url
 	}
 
 	if method == HTTPGet {
@@ -93,5 +90,7 @@ func makeAPIRequest(method HTTPMethod, url string, body interface{}, value inter
 
 //NewClient creates a new API client
 func NewClient() *APIClient {
-	return &APIClient{}
+	return &APIClient{
+		BaseAddress: "https://api.siacentral.com/v2",
+	}
 }

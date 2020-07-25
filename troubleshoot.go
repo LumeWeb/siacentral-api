@@ -16,10 +16,10 @@ type (
 )
 
 //GetHostConnectivity checks that a host is running and connectable at the provided netaddress
-func GetHostConnectivity(netaddress string) (report types.ConnectionReport, err error) {
+func (a *APIClient) GetHostConnectivity(netaddress string) (report types.ConnectionReport, err error) {
 	var resp getConnectionResp
 
-	code, err := makeAPIRequest(HTTPGet, fmt.Sprintf("/troubleshoot/%s", url.PathEscape(netaddress)), nil, &resp)
+	code, err := a.makeAPIRequest(HTTPGet, fmt.Sprintf("/troubleshoot/%s", url.PathEscape(netaddress)), nil, &resp)
 
 	if err != nil {
 		return

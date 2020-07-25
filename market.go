@@ -11,10 +11,10 @@ type getPriceResp struct {
 }
 
 //GetExchangeRate gets the current market exchange rate for Siacoin and Siafund
-func GetExchangeRate() (siacoin map[string]float64, siafund map[string]float64, err error) {
+func (a *APIClient) GetExchangeRate() (siacoin map[string]float64, siafund map[string]float64, err error) {
 	var resp getPriceResp
 
-	code, err := makeAPIRequest(HTTPGet, "/market/exchange-rate", nil, &resp)
+	code, err := a.makeAPIRequest(HTTPGet, "/market/exchange-rate", nil, &resp)
 
 	if err != nil {
 		return

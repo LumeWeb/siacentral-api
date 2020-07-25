@@ -26,10 +26,10 @@ type (
 )
 
 //GetAverageSettings gets the average settings of all active hosts on the network
-func GetAverageSettings() (settings types.HostConfig, err error) {
+func (a *APIClient) GetAverageSettings() (settings types.HostConfig, err error) {
 	var resp getNetworkSettingsResp
 
-	code, err := makeAPIRequest(HTTPGet, "/hosts/settings/average", nil, &resp)
+	code, err := a.makeAPIRequest(HTTPGet, "/hosts/settings/average", nil, &resp)
 
 	if err != nil {
 		return
@@ -46,10 +46,10 @@ func GetAverageSettings() (settings types.HostConfig, err error) {
 }
 
 //GetActiveHosts gets all Sia hosts that have been successfully scanned in the last 24 hours
-func GetActiveHosts() (hosts []types.HostInfo, err error) {
+func (a *APIClient) GetActiveHosts() (hosts []types.HostInfo, err error) {
 	var resp getHostsResp
 
-	code, err := makeAPIRequest(HTTPGet, "/hosts", nil, &resp)
+	code, err := a.makeAPIRequest(HTTPGet, "/hosts", nil, &resp)
 
 	if err != nil {
 		return
@@ -66,10 +66,10 @@ func GetActiveHosts() (hosts []types.HostInfo, err error) {
 }
 
 //GetHost finds a host matching the public key or netaddress
-func GetHost(id string) (host types.HostDetails, err error) {
+func (a *APIClient) GetHost(id string) (host types.HostDetails, err error) {
 	var resp getHostDetailResp
 
-	code, err := makeAPIRequest(HTTPGet, fmt.Sprintf("/hosts/%s", url.PathEscape(id)), nil, &resp)
+	code, err := a.makeAPIRequest(HTTPGet, fmt.Sprintf("/hosts/%s", url.PathEscape(id)), nil, &resp)
 
 	if err != nil {
 		return

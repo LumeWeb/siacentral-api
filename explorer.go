@@ -40,10 +40,10 @@ type (
 )
 
 //GetLatestBlock returns the latest block in the Sia Central explorer
-func GetLatestBlock() (block types.Block, err error) {
+func (a *APIClient) GetLatestBlock() (block types.Block, err error) {
 	var resp getBlockResp
 
-	code, err := makeAPIRequest(HTTPGet, "/explorer/blocks", nil, &resp)
+	code, err := a.makeAPIRequest(HTTPGet, "/explorer/blocks", nil, &resp)
 
 	if err != nil {
 		return
@@ -59,10 +59,10 @@ func GetLatestBlock() (block types.Block, err error) {
 }
 
 //GetBlockByID returns the block with the matching id in the Sia Central explorer
-func GetBlockByID(id string) (block types.Block, err error) {
+func (a *APIClient) GetBlockByID(id string) (block types.Block, err error) {
 	var resp getBlockResp
 
-	code, err := makeAPIRequest(HTTPGet, fmt.Sprintf("/explorer/blocks/%s", id), nil, &resp)
+	code, err := a.makeAPIRequest(HTTPGet, fmt.Sprintf("/explorer/blocks/%s", id), nil, &resp)
 
 	if err != nil {
 		return
@@ -78,10 +78,10 @@ func GetBlockByID(id string) (block types.Block, err error) {
 }
 
 //GetBlockByHeight returns the block at the specified height in the Sia Central explorer
-func GetBlockByHeight(height uint64) (block types.Block, err error) {
+func (a *APIClient) GetBlockByHeight(height uint64) (block types.Block, err error) {
 	var resp getBlockResp
 
-	code, err := makeAPIRequest(HTTPGet, fmt.Sprintf("/explorer/blocks/%d", height), nil, &resp)
+	code, err := a.makeAPIRequest(HTTPGet, fmt.Sprintf("/explorer/blocks/%d", height), nil, &resp)
 
 	if err != nil {
 		return
@@ -97,7 +97,7 @@ func GetBlockByHeight(height uint64) (block types.Block, err error) {
 }
 
 //FindBlocksByID returns all blocks with the specified ids from the Sia Central explorer
-func FindBlocksByID(ids ...string) (blocks []types.Block, err error) {
+func (a *APIClient) FindBlocksByID(ids ...string) (blocks []types.Block, err error) {
 	var resp batchBlocksResp
 
 	if len(ids) > 10000 {
@@ -105,7 +105,7 @@ func FindBlocksByID(ids ...string) (blocks []types.Block, err error) {
 		return
 	}
 
-	code, err := makeAPIRequest(HTTPPost, "/explorer/blocks", map[string]interface{}{
+	code, err := a.makeAPIRequest(HTTPPost, "/explorer/blocks", map[string]interface{}{
 		"block_ids": ids,
 	}, &resp)
 
@@ -123,7 +123,7 @@ func FindBlocksByID(ids ...string) (blocks []types.Block, err error) {
 }
 
 //FindBlocksByHeight returns all blocks with the specified heights from the Sia Central explorer
-func FindBlocksByHeight(heights ...uint64) (blocks []types.Block, err error) {
+func (a *APIClient) FindBlocksByHeight(heights ...uint64) (blocks []types.Block, err error) {
 	var resp batchBlocksResp
 
 	if len(heights) > 10000 {
@@ -131,7 +131,7 @@ func FindBlocksByHeight(heights ...uint64) (blocks []types.Block, err error) {
 		return
 	}
 
-	code, err := makeAPIRequest(HTTPPost, "/explorer/blocks", map[string]interface{}{
+	code, err := a.makeAPIRequest(HTTPPost, "/explorer/blocks", map[string]interface{}{
 		"heights": heights,
 	}, &resp)
 
@@ -149,10 +149,10 @@ func FindBlocksByHeight(heights ...uint64) (blocks []types.Block, err error) {
 }
 
 //GetTransactionByID returns the transaction at the specified height in the Sia Central explorer
-func GetTransactionByID(id string) (transaction types.Transaction, err error) {
+func (a *APIClient) GetTransactionByID(id string) (transaction types.Transaction, err error) {
 	var resp getTransactionResp
 
-	code, err := makeAPIRequest(HTTPGet, fmt.Sprintf("/explorer/transactions/%s", id), nil, &resp)
+	code, err := a.makeAPIRequest(HTTPGet, fmt.Sprintf("/explorer/transactions/%s", id), nil, &resp)
 
 	if err != nil {
 		return
@@ -168,7 +168,7 @@ func GetTransactionByID(id string) (transaction types.Transaction, err error) {
 }
 
 //FindTransactionsByID returns all transactions with the specified ids from the Sia Central explorer
-func FindTransactionsByID(ids ...string) (transactions []types.Transaction, err error) {
+func (a *APIClient) FindTransactionsByID(ids ...string) (transactions []types.Transaction, err error) {
 	var resp batchTransactionsResp
 
 	if len(ids) > 10000 {
@@ -176,7 +176,7 @@ func FindTransactionsByID(ids ...string) (transactions []types.Transaction, err 
 		return
 	}
 
-	code, err := makeAPIRequest(HTTPPost, "/explorer/transactions", map[string]interface{}{
+	code, err := a.makeAPIRequest(HTTPPost, "/explorer/transactions", map[string]interface{}{
 		"transaction_ids": ids,
 	}, &resp)
 
@@ -194,10 +194,10 @@ func FindTransactionsByID(ids ...string) (transactions []types.Transaction, err 
 }
 
 //GetContractByID returns the contract at the specified height in the Sia Central explorer
-func GetContractByID(id string) (contract types.StorageContract, err error) {
+func (a *APIClient) GetContractByID(id string) (contract types.StorageContract, err error) {
 	var resp getContractResp
 
-	code, err := makeAPIRequest(HTTPGet, fmt.Sprintf("/explorer/contracts/%s", id), nil, &resp)
+	code, err := a.makeAPIRequest(HTTPGet, fmt.Sprintf("/explorer/contracts/%s", id), nil, &resp)
 
 	if err != nil {
 		return
@@ -213,7 +213,7 @@ func GetContractByID(id string) (contract types.StorageContract, err error) {
 }
 
 //FindContractsByID returns all contracts with the specified ids from the Sia Central explorer
-func FindContractsByID(ids ...string) (contracts []types.StorageContract, err error) {
+func (a *APIClient) FindContractsByID(ids ...string) (contracts []types.StorageContract, err error) {
 	var resp batchContractsResp
 
 	if len(ids) > 10000 {
@@ -221,7 +221,7 @@ func FindContractsByID(ids ...string) (contracts []types.StorageContract, err er
 		return
 	}
 
-	code, err := makeAPIRequest(HTTPPost, "/explorer/contracts", map[string]interface{}{
+	code, err := a.makeAPIRequest(HTTPPost, "/explorer/contracts", map[string]interface{}{
 		"contracts": ids,
 	}, &resp)
 

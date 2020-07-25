@@ -35,10 +35,10 @@ type (
 )
 
 //GetTransactionFees gets the current transaction fees of the Sia network
-func GetTransactionFees() (min, max, internal siatypes.Currency, err error) {
+func (a *APIClient) GetTransactionFees() (min, max, internal siatypes.Currency, err error) {
 	var resp getFeesResp
 
-	code, err := makeAPIRequest(HTTPGet, "/wallet/fees", nil, &resp)
+	code, err := a.makeAPIRequest(HTTPGet, "/wallet/fees", nil, &resp)
 
 	if err != nil {
 		return
@@ -57,13 +57,13 @@ func GetTransactionFees() (min, max, internal siatypes.Currency, err error) {
 }
 
 //FindAddressBalance gets all unspent outputs and the last n transactions for a list of addresses
-func FindAddressBalance(limit, page int, addresses []string) (resp GetTransactionsResp, err error) {
+func (a *APIClient) FindAddressBalance(limit, page int, addresses []string) (resp GetTransactionsResp, err error) {
 	if len(addresses) > 10000 {
 		err = errors.New("maximum of 10000 addresses")
 		return
 	}
 
-	code, err := makeAPIRequest(HTTPPost, fmt.Sprintf("/wallet/addresses?limit=%d&page=%d", limit, page), map[string]interface{}{
+	code, err := a.makeAPIRequest(HTTPPost, fmt.Sprintf("/wallet/addresses?limit=%d&page=%d", limit, page), map[string]interface{}{
 		"addresses": addresses,
 	}, &resp)
 
@@ -80,7 +80,7 @@ func FindAddressBalance(limit, page int, addresses []string) (resp GetTransactio
 }
 
 //FindUsedAddresses gets all addresses that have been seen in a transaction on the blockchain
-func FindUsedAddresses(addresses []string) (used []types.AddressUsage, err error) {
+func (a *APIClient) FindUsedAddresses(addresses []string) (used []types.AddressUsage, err error) {
 	var resp getAddressesResp
 
 	if len(addresses) > 10000 {
@@ -88,7 +88,7 @@ func FindUsedAddresses(addresses []string) (used []types.AddressUsage, err error
 		return
 	}
 
-	code, err := makeAPIRequest(HTTPPost, "/wallet/addresses/used", map[string]interface{}{
+	code, err := a.makeAPIRequest(HTTPPost, "/wallet/addresses/used", map[string]interface{}{
 		"addresses": addresses,
 	}, &resp)
 
@@ -107,8 +107,8 @@ func FindUsedAddresses(addresses []string) (used []types.AddressUsage, err error
 }
 
 //GetAddressBalance gets all unspent outputs and the last n transactions of an address
-func GetAddressBalance(limit, page int, address string) (resp GetTransactionsResp, err error) {
-	code, err := makeAPIRequest(HTTPGet, fmt.Sprintf("/wallet/addresses/%s", address), nil, &resp)
+func (a *APIClient) GetAddressBalance(limit, page int, address string) (resp GetTransactionsResp, err error) {
+	code, err := a.makeAPIRequest(HTTPGet, fmt.Sprintf("/wallet/addresses/%s", address), nil, &resp)
 
 	if err != nil {
 		return
@@ -123,10 +123,10 @@ func GetAddressBalance(limit, page int, address string) (resp GetTransactionsRes
 }
 
 //BroadcastTransactionSet broadcasts the transaction set to the network
-func BroadcastTransactionSet(transactions []siatypes.Transaction) (err error) {
+func (a *APIClient) BroadcastTransactionSet(transactions []siatypes.Transaction) (err error) {
 	var resp APIResponse
 
-	code, err := makeAPIRequest(HTTPPost, "/wallet/broadcast", map[string]interface{}{
+	code, err := a.makeAPIRequest(HTTPPost, "/wallet/broadcast", map[string]interface{}{
 		"transactions": transactions,
 	}, &resp)
 
