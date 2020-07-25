@@ -3,6 +3,7 @@ package apisdkgo
 import (
 	"errors"
 	"fmt"
+	"net/url"
 
 	"github.com/siacentral/apisdkgo/types"
 )
@@ -68,7 +69,7 @@ func GetActiveHosts() (hosts []types.HostInfo, err error) {
 func GetHost(id string) (host types.HostDetails, err error) {
 	var resp getHostDetailResp
 
-	code, err := makeAPIRequest(HTTPGet, fmt.Sprintf("/hosts/%s", id), nil, &resp)
+	code, err := makeAPIRequest(HTTPGet, fmt.Sprintf("/hosts/%s", url.PathEscape(id)), nil, &resp)
 
 	if err != nil {
 		return
