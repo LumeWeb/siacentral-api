@@ -15,11 +15,16 @@ type (
 		Addresses []types.AddressUsage `json:"addresses"`
 	}
 
+	apiFees struct {
+		Address string            `json:"address"`
+		Fee     siatypes.Currency `json:"fee"`
+	}
+
 	getFeesResp struct {
 		APIResponse
-		Minimum    siatypes.Currency `json:"minimum"`
-		Maximum    siatypes.Currency `json:"maximum"`
-		SiaCentral siatypes.Currency `json:"sia_central"`
+		Minimum siatypes.Currency `json:"minimum"`
+		Maximum siatypes.Currency `json:"maximum"`
+		API     apiFees           `json:"api"`
 	}
 
 	//GetTransactionsResp holds balance and transactions for an address or set of addresses
@@ -35,7 +40,7 @@ type (
 )
 
 //GetTransactionFees gets the current transaction fees of the Sia network
-func (a *APIClient) GetTransactionFees() (min, max, internal siatypes.Currency, err error) {
+func (a *APIClient) GetTransactionFees() (min, max siatypes.Currency, err error) {
 	var resp getFeesResp
 
 	code, err := a.makeAPIRequest(HTTPGet, "/wallet/fees", nil, &resp)
@@ -51,7 +56,27 @@ func (a *APIClient) GetTransactionFees() (min, max, internal siatypes.Currency, 
 
 	min = resp.Minimum
 	max = resp.Maximum
-	internal = resp.SiaCentral
+
+	return
+}
+
+//GetAPIFees gets the current transaction fee and payout address of the Sia Central API
+func (a *APIClient) GetAPIFees() (fee siatypes.Currency, address string, err error) {
+	var resp getFeesResp
+
+	code, err := a.makeAPIRequest(HTTPGet, "/wallet/fees", nil, &resp)
+
+	if err != nil {
+		return
+	}
+
+	if code < 200 || code >= 300 || resp.Type != "success" {
+		err = errors.New(resp.Message)
+		return
+	}
+
+	fee = resp.API.Fee
+	address = resp.API.Address
 
 	return
 }
