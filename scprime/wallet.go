@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/siacentral/apisdkgo/sia/types"
+	"github.com/siacentral/apisdkgo/scprime/types"
 
 	scprimetypes "gitlab.com/scpcorp/ScPrime/types"
 )

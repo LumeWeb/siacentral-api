@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/siacentral/apisdkgo/sia/types"
+	"github.com/siacentral/apisdkgo/scprime/types"
 )
 
 type (
