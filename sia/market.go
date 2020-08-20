@@ -1,7 +1,8 @@
-package apisdkgo
+package sia
 
 import (
 	"errors"
+	"net/http"
 )
 
 type getPriceResp struct {
@@ -14,7 +15,7 @@ type getPriceResp struct {
 func (a *APIClient) GetExchangeRate() (siacoin map[string]float64, siafund map[string]float64, err error) {
 	var resp getPriceResp
 
-	code, err := a.makeAPIRequest(HTTPGet, "/market/exchange-rate", nil, &resp)
+	code, err := a.makeAPIRequest(http.MethodGet, "/market/exchange-rate", nil, &resp)
 
 	if err != nil {
 		return

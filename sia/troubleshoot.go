@@ -1,11 +1,12 @@
-package apisdkgo
+package sia
 
 import (
 	"errors"
 	"fmt"
+	"net/http"
 	"net/url"
 
-	"github.com/siacentral/apisdkgo/types"
+	"github.com/siacentral/apisdkgo/sia/types"
 )
 
 type (
@@ -19,7 +20,7 @@ type (
 func (a *APIClient) GetHostConnectivity(netaddress string) (report types.ConnectionReport, err error) {
 	var resp getConnectionResp
 
-	code, err := a.makeAPIRequest(HTTPGet, fmt.Sprintf("/troubleshoot/%s", url.PathEscape(netaddress)), nil, &resp)
+	code, err := a.makeAPIRequest(http.MethodGet, fmt.Sprintf("/troubleshoot/%s", url.PathEscape(netaddress)), nil, &resp)
 
 	if err != nil {
 		return

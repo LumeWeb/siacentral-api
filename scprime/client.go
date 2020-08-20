@@ -1,4 +1,4 @@
-package apisdkgo
+package scprime
 
 import (
 	"bytes"
@@ -8,14 +8,6 @@ import (
 	"net/http"
 	"strings"
 	"time"
-)
-
-const (
-	HTTPPost   HTTPMethod = "POST"
-	HTTPGet    HTTPMethod = "GET"
-	HTTPPut    HTTPMethod = "PUT"
-	HTTPDelete HTTPMethod = "DELETE"
-	HTTPPatch  HTTPMethod = "PATCH"
 )
 
 var (
@@ -46,14 +38,14 @@ func drainAndClose(rc io.ReadCloser) {
 	rc.Close()
 }
 
-func (a *APIClient) makeAPIRequest(method HTTPMethod, url string, body interface{}, value interface{}) (statusCode int, err error) {
+func (a *APIClient) makeAPIRequest(method string, url string, body interface{}, value interface{}) (statusCode int, err error) {
 	var req *http.Request
 
 	if !strings.HasPrefix(url, "http") {
 		url = a.BaseAddress + url
 	}
 
-	if method == HTTPGet {
+	if method == http.MethodGet {
 		req, err = http.NewRequest(string(method), url, nil)
 	} else {
 		var buf []byte
@@ -91,6 +83,6 @@ func (a *APIClient) makeAPIRequest(method HTTPMethod, url string, body interface
 //NewClient creates a new API client
 func NewClient() *APIClient {
 	return &APIClient{
-		BaseAddress: "https://api.siacentral.com/v2",
+		BaseAddress: "https://api.siacentral.com/v2/scprime",
 	}
 }

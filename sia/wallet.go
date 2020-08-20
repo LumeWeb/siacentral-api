@@ -1,10 +1,11 @@
-package apisdkgo
+package sia
 
 import (
 	"errors"
 	"fmt"
+	"net/http"
 
-	"github.com/siacentral/apisdkgo/types"
+	"github.com/siacentral/apisdkgo/sia/types"
 
 	siatypes "gitlab.com/NebulousLabs/Sia/types"
 )
@@ -43,7 +44,7 @@ type (
 func (a *APIClient) GetTransactionFees() (min, max siatypes.Currency, err error) {
 	var resp getFeesResp
 
-	code, err := a.makeAPIRequest(HTTPGet, "/wallet/fees", nil, &resp)
+	code, err := a.makeAPIRequest(http.MethodGet, "/wallet/fees", nil, &resp)
 
 	if err != nil {
 		return
@@ -64,7 +65,7 @@ func (a *APIClient) GetTransactionFees() (min, max siatypes.Currency, err error)
 func (a *APIClient) GetAPIFees() (fee siatypes.Currency, address string, err error) {
 	var resp getFeesResp
 
-	code, err := a.makeAPIRequest(HTTPGet, "/wallet/fees", nil, &resp)
+	code, err := a.makeAPIRequest(http.MethodGet, "/wallet/fees", nil, &resp)
 
 	if err != nil {
 		return
@@ -88,7 +89,7 @@ func (a *APIClient) FindAddressBalance(limit, page int, addresses []string) (res
 		return
 	}
 
-	code, err := a.makeAPIRequest(HTTPPost, fmt.Sprintf("/wallet/addresses?limit=%d&page=%d", limit, page), map[string]interface{}{
+	code, err := a.makeAPIRequest(http.MethodPost, fmt.Sprintf("/wallet/addresses?limit=%d&page=%d", limit, page), map[string]interface{}{
 		"addresses": addresses,
 	}, &resp)
 
@@ -113,7 +114,7 @@ func (a *APIClient) FindUsedAddresses(addresses []string) (used []types.AddressU
 		return
 	}
 
-	code, err := a.makeAPIRequest(HTTPPost, "/wallet/addresses/used", map[string]interface{}{
+	code, err := a.makeAPIRequest(http.MethodPost, "/wallet/addresses/used", map[string]interface{}{
 		"addresses": addresses,
 	}, &resp)
 
@@ -133,7 +134,7 @@ func (a *APIClient) FindUsedAddresses(addresses []string) (used []types.AddressU
 
 //GetAddressBalance gets all unspent outputs and the last n transactions of an address
 func (a *APIClient) GetAddressBalance(limit, page int, address string) (resp GetTransactionsResp, err error) {
-	code, err := a.makeAPIRequest(HTTPGet, fmt.Sprintf("/wallet/addresses/%s", address), nil, &resp)
+	code, err := a.makeAPIRequest(http.MethodGet, fmt.Sprintf("/wallet/addresses/%s", address), nil, &resp)
 
 	if err != nil {
 		return
@@ -151,7 +152,7 @@ func (a *APIClient) GetAddressBalance(limit, page int, address string) (resp Get
 func (a *APIClient) BroadcastTransactionSet(transactions []siatypes.Transaction) (err error) {
 	var resp APIResponse
 
-	code, err := a.makeAPIRequest(HTTPPost, "/wallet/broadcast", map[string]interface{}{
+	code, err := a.makeAPIRequest(http.MethodPost, "/wallet/broadcast", map[string]interface{}{
 		"transactions": transactions,
 	}, &resp)
 

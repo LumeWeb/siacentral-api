@@ -1,10 +1,11 @@
-package apisdkgo
+package scprime
 
 import (
 	"errors"
 	"fmt"
+	"net/http"
 
-	"github.com/siacentral/apisdkgo/types"
+	"github.com/siacentral/apisdkgo/scprime/types"
 )
 
 type (
@@ -43,7 +44,7 @@ type (
 func (a *APIClient) GetLatestBlock() (block types.Block, err error) {
 	var resp getBlockResp
 
-	code, err := a.makeAPIRequest(HTTPGet, "/explorer/blocks", nil, &resp)
+	code, err := a.makeAPIRequest(http.MethodGet, "/explorer/blocks", nil, &resp)
 
 	if err != nil {
 		return
@@ -62,7 +63,7 @@ func (a *APIClient) GetLatestBlock() (block types.Block, err error) {
 func (a *APIClient) GetBlockByID(id string) (block types.Block, err error) {
 	var resp getBlockResp
 
-	code, err := a.makeAPIRequest(HTTPGet, fmt.Sprintf("/explorer/blocks/%s", id), nil, &resp)
+	code, err := a.makeAPIRequest(http.MethodGet, fmt.Sprintf("/explorer/blocks/%s", id), nil, &resp)
 
 	if err != nil {
 		return
@@ -81,7 +82,7 @@ func (a *APIClient) GetBlockByID(id string) (block types.Block, err error) {
 func (a *APIClient) GetBlockByHeight(height uint64) (block types.Block, err error) {
 	var resp getBlockResp
 
-	code, err := a.makeAPIRequest(HTTPGet, fmt.Sprintf("/explorer/blocks/%d", height), nil, &resp)
+	code, err := a.makeAPIRequest(http.MethodGet, fmt.Sprintf("/explorer/blocks/%d", height), nil, &resp)
 
 	if err != nil {
 		return
@@ -105,7 +106,7 @@ func (a *APIClient) FindBlocksByID(ids ...string) (blocks []types.Block, err err
 		return
 	}
 
-	code, err := a.makeAPIRequest(HTTPPost, "/explorer/blocks", map[string]interface{}{
+	code, err := a.makeAPIRequest(http.MethodPost, "/explorer/blocks", map[string]interface{}{
 		"block_ids": ids,
 	}, &resp)
 
@@ -131,7 +132,7 @@ func (a *APIClient) FindBlocksByHeight(heights ...uint64) (blocks []types.Block,
 		return
 	}
 
-	code, err := a.makeAPIRequest(HTTPPost, "/explorer/blocks", map[string]interface{}{
+	code, err := a.makeAPIRequest(http.MethodPost, "/explorer/blocks", map[string]interface{}{
 		"heights": heights,
 	}, &resp)
 
@@ -152,7 +153,7 @@ func (a *APIClient) FindBlocksByHeight(heights ...uint64) (blocks []types.Block,
 func (a *APIClient) GetTransactionByID(id string) (transaction types.Transaction, err error) {
 	var resp getTransactionResp
 
-	code, err := a.makeAPIRequest(HTTPGet, fmt.Sprintf("/explorer/transactions/%s", id), nil, &resp)
+	code, err := a.makeAPIRequest(http.MethodGet, fmt.Sprintf("/explorer/transactions/%s", id), nil, &resp)
 
 	if err != nil {
 		return
@@ -176,7 +177,7 @@ func (a *APIClient) FindTransactionsByID(ids ...string) (transactions []types.Tr
 		return
 	}
 
-	code, err := a.makeAPIRequest(HTTPPost, "/explorer/transactions", map[string]interface{}{
+	code, err := a.makeAPIRequest(http.MethodPost, "/explorer/transactions", map[string]interface{}{
 		"transaction_ids": ids,
 	}, &resp)
 
@@ -197,7 +198,7 @@ func (a *APIClient) FindTransactionsByID(ids ...string) (transactions []types.Tr
 func (a *APIClient) GetContractByID(id string) (contract types.StorageContract, err error) {
 	var resp getContractResp
 
-	code, err := a.makeAPIRequest(HTTPGet, fmt.Sprintf("/explorer/contracts/%s", id), nil, &resp)
+	code, err := a.makeAPIRequest(http.MethodGet, fmt.Sprintf("/explorer/contracts/%s", id), nil, &resp)
 
 	if err != nil {
 		return
@@ -221,7 +222,7 @@ func (a *APIClient) FindContractsByID(ids ...string) (contracts []types.StorageC
 		return
 	}
 
-	code, err := a.makeAPIRequest(HTTPPost, "/explorer/contracts", map[string]interface{}{
+	code, err := a.makeAPIRequest(http.MethodPost, "/explorer/contracts", map[string]interface{}{
 		"contracts": ids,
 	}, &resp)
 

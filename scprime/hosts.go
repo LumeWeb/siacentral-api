@@ -1,11 +1,12 @@
-package apisdkgo
+package scprime
 
 import (
 	"errors"
 	"fmt"
+	"net/http"
 	"net/url"
 
-	"github.com/siacentral/apisdkgo/types"
+	"github.com/siacentral/apisdkgo/sia/types"
 )
 
 type (
@@ -29,7 +30,7 @@ type (
 func (a *APIClient) GetAverageSettings() (settings types.HostConfig, err error) {
 	var resp getNetworkSettingsResp
 
-	code, err := a.makeAPIRequest(HTTPGet, "/hosts/settings/average", nil, &resp)
+	code, err := a.makeAPIRequest(http.MethodGet, "/hosts/settings/average", nil, &resp)
 
 	if err != nil {
 		return
@@ -49,7 +50,7 @@ func (a *APIClient) GetAverageSettings() (settings types.HostConfig, err error) 
 func (a *APIClient) GetActiveHosts() (hosts []types.HostInfo, err error) {
 	var resp getHostsResp
 
-	code, err := a.makeAPIRequest(HTTPGet, "/hosts", nil, &resp)
+	code, err := a.makeAPIRequest(http.MethodGet, "/hosts", nil, &resp)
 
 	if err != nil {
 		return
@@ -69,7 +70,7 @@ func (a *APIClient) GetActiveHosts() (hosts []types.HostInfo, err error) {
 func (a *APIClient) GetHost(id string) (host types.HostDetails, err error) {
 	var resp getHostDetailResp
 
-	code, err := a.makeAPIRequest(HTTPGet, fmt.Sprintf("/hosts/%s", url.PathEscape(id)), nil, &resp)
+	code, err := a.makeAPIRequest(http.MethodGet, fmt.Sprintf("/hosts/%s", url.PathEscape(id)), nil, &resp)
 
 	if err != nil {
 		return
