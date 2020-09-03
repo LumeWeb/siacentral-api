@@ -37,6 +37,7 @@ type (
 		UnspentSiafundOutputs   []types.SiafundOutput `json:"unspent_siafund_outputs"`
 		Transactions            []types.Transaction   `json:"transactions"`
 		UnconfirmedTransactions []types.Transaction   `json:"unconfirmed_transactions"`
+		SiafundClaim            siatypes.Currency     `json:"siafund_claim"`
 	}
 )
 
