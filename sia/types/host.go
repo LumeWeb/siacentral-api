@@ -3,6 +3,7 @@ package types
 import (
 	"time"
 
+	"gitlab.com/NebulousLabs/Sia/modules"
 	siatypes "gitlab.com/NebulousLabs/Sia/types"
 )
 
@@ -17,23 +18,40 @@ type (
 		Timestamp     time.Time `json:"timestamp,omitempty"`
 	}
 
-	//HostInfo information about a host in the database
-	HostInfo struct {
-		NetAddress         string                `json:"net_address"`
-		PublicKey          string                `json:"public_key"`
-		ResolvedIP         string                `json:"connected_ip"`
-		Latency            time.Duration         `json:"latency"`
-		FirstSeenHeight    uint64                `json:"first_seen_height"`
-		FirstSeenTimestamp time.Time             `json:"first_seen_timestamp"`
-		LastScan           time.Time             `json:"last_scan"`
-		Announcements      []Announcement        `json:"announcements,omitempty"`
-		Settings           *HostExternalSettings `json:"settings"`
+	// AvgHostBenchmark AvgHostBenchmark
+	AvgHostBenchmark struct {
+		ContractTime uint64 `json:"contract_time"`
+		UploadTime   uint64 `json:"upload_time"`
+		DownloadTime uint64 `json:"download_time"`
+		DataSize     uint64 `json:"data_size"`
 	}
 
-	//HostDetails additional details about a host from the database
+	// HostBenchmark a benchmark from the host
+	HostBenchmark struct {
+		ContractTime   uint64    `json:"contract_time"`
+		UploadTime     uint64    `json:"upload_time"`
+		DownloadTime   uint64    `json:"download_time"`
+		DataSize       uint64    `json:"data_size"`
+		LastAttempt    time.Time `json:"last_attempt"`
+		LastSuccessful time.Time `json:"last_successful"`
+		ErrorMessage   *string   `json:"error"`
+	}
+
+	//HostDetails the latest details on the host
 	HostDetails struct {
-		HostInfo
-		ResolvedIPs []string `json:"resolved_ips,omitempty"`
+		NetAddress         string                 `json:"net_address"`
+		PublicKey          string                 `json:"public_key"`
+		Version            string                 `json:"version"`
+		EstimatedUptime    float32                `json:"estimated_uptime"`
+		Online             bool                   `json:"online"`
+		FirstSeenHeight    uint64                 `json:"first_seen_height"`
+		FirstSeenTimestamp time.Time              `json:"first_seen_timestamp"`
+		LastScan           time.Time              `json:"last_scan"`
+		LastSuccessScan    time.Time              `json:"last_success_scan"`
+		Settings           *HostExternalSettings  `json:"settings"`
+		PriceTable         *modules.RPCPriceTable `json:"price_table"`
+		Benchmark          *HostBenchmark         `json:"benchmark"`
+		BenchmarkRHP2      *HostBenchmark         `json:"benchmark_rhp2"`
 	}
 
 	//HostConfig the settings pulled from the host during a scan

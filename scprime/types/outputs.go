@@ -23,11 +23,14 @@ type (
 
 	//SiafundOutput an output of siafunds for a transaction
 	SiafundOutput struct {
-		OutputID     string                `json:"output_id"`
-		UnlockHash   string                `json:"unlock_hash"`
-		BlockHeight  uint64                `json:"block_height"`
-		Value        scprimetypes.Currency `json:"value"`
-		SiacoinClaim scprimetypes.Currency `json:"siacoin_claim"`
+		OutputID           string                `json:"output_id"`
+		BlockID            string                `json:"block_id"`
+		SpentTransactionID string                `json:"spent_transaction_id"`
+		UnlockHash         string                `json:"unlock_hash"`
+		BlockHeight        uint64                `json:"block_height"`
+		Value              scprimetypes.Currency `json:"value"`
+		ClaimStart         scprimetypes.Currency `json:"claim_start"`
+		ClaimValue         scprimetypes.Currency `json:"claim_value"`
 	}
 
 	//SiafundInput an input of siafunds for a transaction
