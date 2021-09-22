@@ -8,8 +8,8 @@ import (
 	"strconv"
 
 	"github.com/siacentral/apisdkgo/sia/types"
-	siamods "gitlab.com/NebulousLabs/Sia/modules"
-	siatypes "gitlab.com/NebulousLabs/Sia/types"
+	siamods "go.sia.tech/siad/modules"
+	siatypes "go.sia.tech/siad/types"
 )
 
 type (
@@ -79,19 +79,19 @@ func buildFilter(filter HostFilter) url.Values {
 	}
 
 	if filter.MinDuration != nil {
-		vals.Add("minduration", strconv.FormatUint(*filter.MinDuration, 64))
+		vals.Add("minduration", strconv.FormatUint(*filter.MinDuration, 10))
 	}
 
 	if filter.MinStorage != nil {
-		vals.Add("minstorage", strconv.FormatUint(*filter.MinStorage, 64))
+		vals.Add("minstorage", strconv.FormatUint(*filter.MinStorage, 10))
 	}
 
 	if filter.MinUploadSpeed != nil {
-		vals.Add("minuploadspeed", strconv.FormatUint(*filter.MinUploadSpeed, 64))
+		vals.Add("minuploadspeed", strconv.FormatUint(*filter.MinUploadSpeed, 10))
 	}
 
 	if filter.MinDownloadSpeed != nil {
-		vals.Add("mindownloadspeed", strconv.FormatUint(*filter.MinDownloadSpeed, 64))
+		vals.Add("mindownloadspeed", strconv.FormatUint(*filter.MinDownloadSpeed, 10))
 	}
 
 	if filter.MaxStoragePrice != nil {
@@ -147,8 +147,7 @@ func (a *APIClient) GetNetworkAverages() (settings types.HostConfig, rhp3Bench t
 func (a *APIClient) GetActiveHosts(filter HostFilter) (hosts []types.HostDetails, err error) {
 	var resp getHostsResp
 
-	url, err := url.Parse("https://api.siacentral.com/v2/hosts")
-
+	url, _ := url.Parse("https://api.siacentral.com/v2/hosts")
 	url.RawQuery = buildFilter(filter).Encode()
 
 	code, err := a.makeAPIRequest(http.MethodGet, url.String(), nil, &resp)

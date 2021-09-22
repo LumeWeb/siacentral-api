@@ -1,7 +1,7 @@
 package types
 
 import (
-	siatypes "gitlab.com/NebulousLabs/Sia/types"
+	siatypes "go.sia.tech/siad/types"
 )
 
 type (

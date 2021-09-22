@@ -7,7 +7,7 @@ import (
 
 	"github.com/siacentral/apisdkgo/sia/types"
 
-	siatypes "gitlab.com/NebulousLabs/Sia/types"
+	siatypes "go.sia.tech/siad/types"
 )
 
 type (

@@ -3,7 +3,7 @@ package types
 import (
 	"time"
 
-	siatypes "gitlab.com/NebulousLabs/Sia/types"
+	siatypes "go.sia.tech/siad/types"
 )
 
 type (

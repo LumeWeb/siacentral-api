@@ -3,8 +3,8 @@ package types
 import (
 	"time"
 
-	"gitlab.com/NebulousLabs/Sia/modules"
-	siatypes "gitlab.com/NebulousLabs/Sia/types"
+	"go.sia.tech/siad/modules"
+	siatypes "go.sia.tech/siad/types"
 )
 
 type (
