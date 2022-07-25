@@ -13,12 +13,13 @@ type (
 
 	//SiacoinOutput an output of siacoins for a transaction
 	SiacoinOutput struct {
-		OutputID       string            `json:"output_id"`
-		UnlockHash     string            `json:"unlock_hash"`
-		Source         string            `json:"source"`
-		MaturityHeight uint64            `json:"maturity_height"`
-		BlockHeight    uint64            `json:"block_height"`
-		Value          siatypes.Currency `json:"value"`
+		OutputID           string            `json:"output_id"`
+		UnlockHash         string            `json:"unlock_hash"`
+		Source             string            `json:"source"`
+		SpentTransactionID string            `json:"spent_transaction_id"`
+		MaturityHeight     uint64            `json:"maturity_height"`
+		BlockHeight        uint64            `json:"block_height"`
+		Value              siatypes.Currency `json:"value"`
 	}
 
 	//SiafundOutput an output of siafunds for a transaction
