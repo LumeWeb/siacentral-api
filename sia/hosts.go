@@ -71,7 +71,7 @@ func buildFilter(filter HostFilter) url.Values {
 	}
 
 	if filter.Benchmarked != nil {
-		vals.Add("benchmarked", fmt.Sprintf("%t", *filter.AcceptingContracts))
+		vals.Add("benchmarked", fmt.Sprintf("%t", *filter.Benchmarked))
 	}
 
 	if filter.MinUptime != nil {
