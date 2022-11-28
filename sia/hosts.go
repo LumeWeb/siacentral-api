@@ -34,7 +34,7 @@ type (
 )
 
 func (hf HostFilter) WithAcceptingContracts(accepting bool) {
-	hf["accepting_contracts"] = []string{strconv.FormatBool(accepting)}
+	hf["acceptcontracts"] = []string{strconv.FormatBool(accepting)}
 }
 
 func (hf HostFilter) WithOnline(online bool) {
@@ -65,16 +65,16 @@ func (hf HostFilter) WithMinDownloadSpeed(minDownloadSpeed uint64) {
 	hf["mindownloadspeed"] = []string{strconv.FormatUint(minDownloadSpeed, 10)}
 }
 
-func (hf HostFilter) WithMaxStoragePrice(maxStoragePrice types.Currency) {
-	hf["maxstorageprice"] = []string{maxStoragePrice.HumanString()}
+func (hf HostFilter) WithMaxStoragePrice(price types.Currency) {
+	hf["maxstorageprice"] = []string{price.String()}
 }
 
-func (hf HostFilter) WithMaxUploadPrice(maxUploadPrice types.Currency) {
-	hf["maxuploadprice"] = []string{maxUploadPrice.HumanString()}
+func (hf HostFilter) WithMaxUploadPrice(price types.Currency) {
+	hf["maxuploadprice"] = []string{price.String()}
 }
 
-func (hf HostFilter) WithMaxDownloadPrice(maxDownloadPrice types.Currency) {
-	hf["maxdownloadprice"] = []string{maxDownloadPrice.HumanString()}
+func (hf HostFilter) WithMaxDownloadPrice(price types.Currency) {
+	hf["maxdownloadprice"] = []string{price.String()}
 }
 
 func (hf HostFilter) WithMaxContractPrice(price types.Currency) {
