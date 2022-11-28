@@ -5,19 +5,17 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-
-	"github.com/siacentral/apisdkgo/sia/types"
 )
 
 type (
 	getConnectionResp struct {
 		APIResponse
-		Report types.ConnectionReport `json:"report"`
+		Report ConnectionReport `json:"report"`
 	}
 )
 
-//GetHostConnectivity checks that a host is running and connectable at the provided netaddress
-func (a *APIClient) GetHostConnectivity(netaddress string) (report types.ConnectionReport, err error) {
+// GetHostConnectivity checks that a host is running and connectable at the provided netaddress
+func (a *APIClient) GetHostConnectivity(netaddress string) (report ConnectionReport, err error) {
 	var resp getConnectionResp
 
 	code, err := a.makeAPIRequest(http.MethodGet, fmt.Sprintf("/troubleshoot/%s", url.PathEscape(netaddress)), nil, &resp)

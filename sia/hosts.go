@@ -7,122 +7,90 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/siacentral/apisdkgo/sia/types"
 	siamods "go.sia.tech/siad/modules"
-	siatypes "go.sia.tech/siad/types"
+	"go.sia.tech/siad/types"
 )
 
 type (
 	getHostsResp struct {
 		APIResponse
-		Hosts []types.HostDetails `json:"hosts"`
+		Hosts []HostDetails `json:"hosts"`
 	}
 
 	getHostDetailResp struct {
 		APIResponse
-		Host types.HostDetails `json:"host"`
+		Host HostDetails `json:"host"`
 	}
 
 	getAveragesResp struct {
 		APIResponse
-		Settings       types.HostConfig       `json:"settings"`
-		PriceTable     siamods.RPCPriceTable  `json:"price_table"`
-		Benchmarks     types.AvgHostBenchmark `json:"benchmarks"`
-		BenchmarksRHP2 types.AvgHostBenchmark `json:"benchmarks_rhp2"`
+		Settings       HostConfig            `json:"settings"`
+		PriceTable     siamods.RPCPriceTable `json:"price_table"`
+		Benchmarks     AvgHostBenchmark      `json:"benchmarks"`
+		BenchmarksRHP2 AvgHostBenchmark      `json:"benchmarks_rhp2"`
 	}
 
-	HostFilter struct {
-		Page                 int
-		Limit                int
-		AcceptingContracts   *bool
-		Online               *bool
-		Benchmarked          *bool
-		MinUptime            *float32
-		MinDuration          *uint64
-		MinStorage           *uint64
-		MinUploadSpeed       *uint64
-		MinDownloadSpeed     *uint64
-		MaxStoragePrice      *siatypes.Currency
-		MaxUploadPrice       *siatypes.Currency
-		MaxDownloadPrice     *siatypes.Currency
-		MaxContractPrice     *siatypes.Currency
-		MaxBaseRPCPrice      *siatypes.Currency
-		MaxSectorAccessPrice *siatypes.Currency
-	}
+	HostFilter url.Values
 )
 
-func buildFilter(filter HostFilter) url.Values {
-	vals := url.Values{}
-
-	if filter.Page > 0 {
-		vals.Add("page", strconv.Itoa(filter.Page))
-	}
-
-	if filter.Limit > 0 {
-		vals.Add("limit", strconv.Itoa(filter.Limit))
-	}
-
-	if filter.AcceptingContracts != nil {
-		vals.Add("acceptcontracts", fmt.Sprintf("%t", *filter.AcceptingContracts))
-	}
-
-	if filter.Online != nil {
-		vals.Add("online", fmt.Sprintf("%t", *filter.Online))
-	}
-
-	if filter.Benchmarked != nil {
-		vals.Add("benchmarked", fmt.Sprintf("%t", *filter.Benchmarked))
-	}
-
-	if filter.MinUptime != nil {
-		vals.Add("minuptime", fmt.Sprintf("%f", *filter.MinUptime))
-	}
-
-	if filter.MinDuration != nil {
-		vals.Add("minduration", strconv.FormatUint(*filter.MinDuration, 10))
-	}
-
-	if filter.MinStorage != nil {
-		vals.Add("minstorage", strconv.FormatUint(*filter.MinStorage, 10))
-	}
-
-	if filter.MinUploadSpeed != nil {
-		vals.Add("minuploadspeed", strconv.FormatUint(*filter.MinUploadSpeed, 10))
-	}
-
-	if filter.MinDownloadSpeed != nil {
-		vals.Add("mindownloadspeed", strconv.FormatUint(*filter.MinDownloadSpeed, 10))
-	}
-
-	if filter.MaxStoragePrice != nil {
-		vals.Add("maxstorageprice", filter.MaxStoragePrice.String())
-	}
-
-	if filter.MaxUploadPrice != nil {
-		vals.Add("maxuploadprice", filter.MaxUploadPrice.String())
-	}
-
-	if filter.MaxDownloadPrice != nil {
-		vals.Add("maxdownloadprice", filter.MaxDownloadPrice.String())
-	}
-
-	if filter.MaxContractPrice != nil {
-		vals.Add("maxcontractprice", filter.MaxContractPrice.String())
-	}
-
-	if filter.MaxBaseRPCPrice != nil {
-		vals.Add("maxbaserpcprice", filter.MaxBaseRPCPrice.String())
-	}
-
-	if filter.MaxSectorAccessPrice != nil {
-		vals.Add("maxsectoraccessprice", filter.MaxSectorAccessPrice.String())
-	}
-
-	return vals
+func (hf HostFilter) WithAcceptingContracts(accepting bool) {
+	hf["accepting_contracts"] = []string{strconv.FormatBool(accepting)}
 }
 
-//GetNetworkAverages gets the average settings and benchmarks of all active hosts on the network
-func (a *APIClient) GetNetworkAverages() (settings types.HostConfig, rhp3Bench types.AvgHostBenchmark, rhp2Bench types.AvgHostBenchmark, err error) {
+func (hf HostFilter) WithOnline(online bool) {
+	hf["online"] = []string{strconv.FormatBool(online)}
+}
+
+func (hf HostFilter) WithBenchmarked(benchmarked bool) {
+	hf["benchmarked"] = []string{strconv.FormatBool(benchmarked)}
+}
+
+func (hf HostFilter) WithMinUptime(minUptime float64) {
+	hf["minuptime"] = []string{strconv.FormatFloat(minUptime, 'f', -1, 64)}
+}
+
+func (hf HostFilter) WithMinDuration(minDuration uint64) {
+	hf["minduration"] = []string{strconv.FormatUint(minDuration, 10)}
+}
+
+func (hf HostFilter) WithMinStorage(minStorage uint64) {
+	hf["minstorage"] = []string{strconv.FormatUint(minStorage, 10)}
+}
+
+func (hf HostFilter) WithMinUploadSpeed(minUploadSpeed uint64) {
+	hf["minuploadspeed"] = []string{strconv.FormatUint(minUploadSpeed, 10)}
+}
+
+func (hf HostFilter) WithMinDownloadSpeed(minDownloadSpeed uint64) {
+	hf["mindownloadspeed"] = []string{strconv.FormatUint(minDownloadSpeed, 10)}
+}
+
+func (hf HostFilter) WithMaxStoragePrice(maxStoragePrice types.Currency) {
+	hf["maxstorageprice"] = []string{maxStoragePrice.HumanString()}
+}
+
+func (hf HostFilter) WithMaxUploadPrice(maxUploadPrice types.Currency) {
+	hf["maxuploadprice"] = []string{maxUploadPrice.HumanString()}
+}
+
+func (hf HostFilter) WithMaxDownloadPrice(maxDownloadPrice types.Currency) {
+	hf["maxdownloadprice"] = []string{maxDownloadPrice.HumanString()}
+}
+
+func (hf HostFilter) WithMaxContractPrice(price types.Currency) {
+	hf["maxcontractprice"] = []string{price.String()}
+}
+
+func (hf HostFilter) WithMaxBaseRPCPrice(price types.Currency) {
+	hf["maxbaserpcprice"] = []string{price.String()}
+}
+
+func (hf HostFilter) WithSectorAccessPrice(price types.Currency) {
+	hf["maxsectoraccessprice"] = []string{price.String()}
+}
+
+// GetNetworkAverages gets the average settings and benchmarks of all active hosts on the network
+func (a *APIClient) GetNetworkAverages() (settings HostConfig, rhp3Bench AvgHostBenchmark, rhp2Bench AvgHostBenchmark, err error) {
 	var resp getAveragesResp
 
 	code, err := a.makeAPIRequest(http.MethodGet, "/hosts/network/averages", nil, &resp)
@@ -143,14 +111,25 @@ func (a *APIClient) GetNetworkAverages() (settings types.HostConfig, rhp3Bench t
 	return
 }
 
-//GetActiveHosts gets all Sia hosts that have been successfully scanned in the last 24 hours
-func (a *APIClient) GetActiveHosts(filter HostFilter) (hosts []types.HostDetails, err error) {
+// GetActiveHosts gets all Sia hosts that have been successfully scanned in the last 24 hours
+func (a *APIClient) GetActiveHosts(filter HostFilter, page, limit int) (hosts []HostDetails, err error) {
 	var resp getHostsResp
 
-	url, _ := url.Parse("https://api.siacentral.com/v2/hosts")
-	url.RawQuery = buildFilter(filter).Encode()
+	if page < 0 {
+		page = 0
+	}
 
-	code, err := a.makeAPIRequest(http.MethodGet, url.String(), nil, &resp)
+	if limit < 0 || limit > 500 {
+		limit = 500
+	}
+
+	url.Values(filter).Add("page", strconv.Itoa(page))
+	url.Values(filter).Add("limit", strconv.Itoa(limit))
+
+	endpoint, _ := url.Parse("https://api.siacentral.com/v2/hosts")
+	endpoint.RawQuery = url.Values(filter).Encode()
+
+	code, err := a.makeAPIRequest(http.MethodGet, endpoint.String(), nil, &resp)
 
 	if err != nil {
 		return
@@ -166,8 +145,8 @@ func (a *APIClient) GetActiveHosts(filter HostFilter) (hosts []types.HostDetails
 	return
 }
 
-//GetHost finds a host matching the public key or netaddress
-func (a *APIClient) GetHost(id string) (host types.HostDetails, err error) {
+// GetHost finds a host matching the public key or netaddress
+func (a *APIClient) GetHost(id string) (host HostDetails, err error) {
 	var resp getHostDetailResp
 
 	code, err := a.makeAPIRequest(http.MethodGet, fmt.Sprintf("/hosts/%s", url.PathEscape(id)), nil, &resp)

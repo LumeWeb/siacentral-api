@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"io"
-	"io/ioutil"
 	"net/http"
 	"strings"
 	"time"
@@ -34,7 +33,7 @@ type (
 )
 
 func drainAndClose(rc io.ReadCloser) {
-	io.Copy(ioutil.Discard, rc)
+	io.Copy(io.Discard, rc)
 	rc.Close()
 }
 
@@ -80,7 +79,7 @@ func (a *APIClient) makeAPIRequest(method string, url string, body interface{}, 
 	return
 }
 
-//NewClient creates a new API client
+// NewClient creates a new API client
 func NewClient() *APIClient {
 	return &APIClient{
 		BaseAddress: "https://api.siacentral.com/v2",

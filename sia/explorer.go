@@ -4,44 +4,42 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
-
-	"github.com/siacentral/apisdkgo/sia/types"
 )
 
 type (
 	getBlockResp struct {
 		APIResponse
-		Block types.Block `json:"block"`
+		Block Block `json:"block"`
 	}
 
 	batchBlocksResp struct {
 		APIResponse
-		Blocks []types.Block `json:"blocks"`
+		Blocks []Block `json:"blocks"`
 	}
 
 	getTransactionResp struct {
 		APIResponse
-		Transaction types.Transaction `json:"transaction"`
+		Transaction Transaction `json:"transaction"`
 	}
 
 	batchTransactionsResp struct {
 		APIResponse
-		Transactions []types.Transaction `json:"transactions"`
+		Transactions []Transaction `json:"transactions"`
 	}
 
 	getContractResp struct {
 		APIResponse
-		Contract types.StorageContract `json:"contract"`
+		Contract StorageContract `json:"contract"`
 	}
 
 	batchContractsResp struct {
 		APIResponse
-		Contracts []types.StorageContract `json:"contracts"`
+		Contracts []StorageContract `json:"contracts"`
 	}
 )
 
-//GetLatestBlock returns the latest block in the Sia Central explorer
-func (a *APIClient) GetLatestBlock() (block types.Block, err error) {
+// GetLatestBlock returns the latest block in the Sia Central explorer
+func (a *APIClient) GetLatestBlock() (block Block, err error) {
 	var resp getBlockResp
 
 	code, err := a.makeAPIRequest(http.MethodGet, "/explorer/blocks", nil, &resp)
@@ -59,8 +57,8 @@ func (a *APIClient) GetLatestBlock() (block types.Block, err error) {
 	return
 }
 
-//GetBlockByID returns the block with the matching id in the Sia Central explorer
-func (a *APIClient) GetBlockByID(id string) (block types.Block, err error) {
+// GetBlockByID returns the block with the matching id in the Sia Central explorer
+func (a *APIClient) GetBlockByID(id string) (block Block, err error) {
 	var resp getBlockResp
 
 	code, err := a.makeAPIRequest(http.MethodGet, fmt.Sprintf("/explorer/blocks/%s", id), nil, &resp)
@@ -78,8 +76,8 @@ func (a *APIClient) GetBlockByID(id string) (block types.Block, err error) {
 	return
 }
 
-//GetBlockByHeight returns the block at the specified height in the Sia Central explorer
-func (a *APIClient) GetBlockByHeight(height uint64) (block types.Block, err error) {
+// GetBlockByHeight returns the block at the specified height in the Sia Central explorer
+func (a *APIClient) GetBlockByHeight(height uint64) (block Block, err error) {
 	var resp getBlockResp
 
 	code, err := a.makeAPIRequest(http.MethodGet, fmt.Sprintf("/explorer/blocks/%d", height), nil, &resp)
@@ -97,8 +95,8 @@ func (a *APIClient) GetBlockByHeight(height uint64) (block types.Block, err erro
 	return
 }
 
-//FindBlocksByID returns all blocks with the specified ids from the Sia Central explorer
-func (a *APIClient) FindBlocksByID(ids ...string) (blocks []types.Block, err error) {
+// FindBlocksByID returns all blocks with the specified ids from the Sia Central explorer
+func (a *APIClient) FindBlocksByID(ids ...string) (blocks []Block, err error) {
 	var resp batchBlocksResp
 
 	if len(ids) > 10000 {
@@ -123,8 +121,8 @@ func (a *APIClient) FindBlocksByID(ids ...string) (blocks []types.Block, err err
 	return
 }
 
-//FindBlocksByHeight returns all blocks with the specified heights from the Sia Central explorer
-func (a *APIClient) FindBlocksByHeight(heights ...uint64) (blocks []types.Block, err error) {
+// FindBlocksByHeight returns all blocks with the specified heights from the Sia Central explorer
+func (a *APIClient) FindBlocksByHeight(heights ...uint64) (blocks []Block, err error) {
 	var resp batchBlocksResp
 
 	if len(heights) > 10000 {
@@ -149,8 +147,8 @@ func (a *APIClient) FindBlocksByHeight(heights ...uint64) (blocks []types.Block,
 	return
 }
 
-//GetTransactionByID returns the transaction at the specified height in the Sia Central explorer
-func (a *APIClient) GetTransactionByID(id string) (transaction types.Transaction, err error) {
+// GetTransactionByID returns the transaction at the specified height in the Sia Central explorer
+func (a *APIClient) GetTransactionByID(id string) (transaction Transaction, err error) {
 	var resp getTransactionResp
 
 	code, err := a.makeAPIRequest(http.MethodGet, fmt.Sprintf("/explorer/transactions/%s", id), nil, &resp)
@@ -168,8 +166,8 @@ func (a *APIClient) GetTransactionByID(id string) (transaction types.Transaction
 	return
 }
 
-//FindTransactionsByID returns all transactions with the specified ids from the Sia Central explorer
-func (a *APIClient) FindTransactionsByID(ids ...string) (transactions []types.Transaction, err error) {
+// FindTransactionsByID returns all transactions with the specified ids from the Sia Central explorer
+func (a *APIClient) FindTransactionsByID(ids ...string) (transactions []Transaction, err error) {
 	var resp batchTransactionsResp
 
 	if len(ids) > 10000 {
@@ -194,8 +192,8 @@ func (a *APIClient) FindTransactionsByID(ids ...string) (transactions []types.Tr
 	return
 }
 
-//GetContractByID returns the contract at the specified height in the Sia Central explorer
-func (a *APIClient) GetContractByID(id string) (contract types.StorageContract, err error) {
+// GetContractByID returns the contract at the specified height in the Sia Central explorer
+func (a *APIClient) GetContractByID(id string) (contract StorageContract, err error) {
 	var resp getContractResp
 
 	code, err := a.makeAPIRequest(http.MethodGet, fmt.Sprintf("/explorer/contracts/%s", id), nil, &resp)
@@ -213,8 +211,8 @@ func (a *APIClient) GetContractByID(id string) (contract types.StorageContract, 
 	return
 }
 
-//FindContractsByID returns all contracts with the specified ids from the Sia Central explorer
-func (a *APIClient) FindContractsByID(ids ...string) (contracts []types.StorageContract, err error) {
+// FindContractsByID returns all contracts with the specified ids from the Sia Central explorer
+func (a *APIClient) FindContractsByID(ids ...string) (contracts []StorageContract, err error) {
 	var resp batchContractsResp
 
 	if len(ids) > 10000 {
