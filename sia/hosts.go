@@ -3,6 +3,7 @@ package sia
 import (
 	"errors"
 	"fmt"
+	"log"
 	"net/http"
 	"net/url"
 	"strconv"
@@ -172,11 +173,18 @@ func (a *APIClient) GetActiveHosts(filter HostFilter, page, limit int) (hosts []
 		limit = 500
 	}
 
-	url.Values(filter).Add("page", strconv.Itoa(page))
-	url.Values(filter).Add("limit", strconv.Itoa(limit))
+	values := make(url.Values)
+	for k, v := range filter {
+		values[k] = v
+	}
+
+	values.Add("page", strconv.Itoa(page))
+	values.Add("limit", strconv.Itoa(limit))
 
 	endpoint, _ := url.Parse("https://api.siacentral.com/v2/hosts")
-	endpoint.RawQuery = url.Values(filter).Encode()
+	endpoint.RawQuery = values.Encode()
+
+	log.Println(endpoint.String())
 
 	code, err := a.makeAPIRequest(http.MethodGet, endpoint.String(), nil, &resp)
 
