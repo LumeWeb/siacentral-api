@@ -263,4 +263,10 @@ type (
 		Address   string `json:"address"`
 		UsageType string `json:"usage_type"`
 	}
+
+	ChainIndex struct {
+		ID       string `json:"id"`
+		ParentID string `json:"parent_id"`
+		Height   uint64 `json:"height"`
+	}
 )

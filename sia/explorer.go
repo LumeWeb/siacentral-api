@@ -36,7 +36,28 @@ type (
 		APIResponse
 		Contracts []StorageContract `json:"contracts"`
 	}
+
+	getChainIndexResp struct {
+		APIResponse
+		Index ChainIndex `json:"index"`
+	}
 )
+
+func (a *APIClient) GetChainIndex() (index ChainIndex, err error) {
+	var resp getChainIndexResp
+
+	code, err := a.makeAPIRequest(http.MethodGet, "/explorer/chainindex", nil, &resp)
+	if err != nil {
+		return
+	}
+
+	if code < 200 || code >= 300 || resp.Type != "success" {
+		err = errors.New(resp.Message)
+		return
+	}
+	index = resp.Index
+	return
+}
 
 // GetLatestBlock returns the latest block in the Sia Central explorer
 func (a *APIClient) GetLatestBlock() (block Block, err error) {
