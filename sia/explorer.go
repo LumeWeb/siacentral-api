@@ -46,7 +46,7 @@ type (
 func (a *APIClient) GetChainIndex() (index ChainIndex, err error) {
 	var resp getChainIndexResp
 
-	code, err := a.makeAPIRequest(http.MethodGet, "/explorer/chainindex", nil, &resp)
+	code, err := a.makeAPIRequest(http.MethodGet, "/explorer/consensus/index", nil, &resp)
 	if err != nil {
 		return
 	}
