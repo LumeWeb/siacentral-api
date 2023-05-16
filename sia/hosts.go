@@ -13,6 +13,27 @@ import (
 	"go.sia.tech/siad/types"
 )
 
+const (
+	acceptContractsParam      = "acceptcontracts"
+	onlineParam               = "online"
+	benchmarkedParam          = "benchmarked"
+	minAgeParam               = "minage"
+	minUptimeParam            = "minuptime"
+	minDurationParam          = "minduration"
+	minStorageParam           = "minstorage"
+	minUploadSpeedParam       = "minuploadspeed"
+	minDownloadSpeedParam     = "mindownloadspeed"
+	maxStoragePriceParam      = "maxstorageprice"
+	maxUploadPriceParam       = "maxuploadprice"
+	maxDownloadPriceParam     = "maxdownloadprice"
+	maxContractPriceParam     = "maxcontractprice"
+	maxBaseRPCPriceParam      = "maxbaserpcprice"
+	maxSectorAccessPriceParam = "maxsectoraccessprice"
+
+	sortParam = "sort"
+	dirParam  = "dir"
+)
+
 // UniqueID is a unique identifier
 type UniqueID types.Specifier
 
@@ -156,7 +177,7 @@ type (
 		BenchmarksRHP2 AvgHostBenchmark `json:"benchmarks_rhp2"`
 	}
 
-	HostFilter url.Values
+	HostFilter func(url.Values)
 	HostSort   string
 )
 
@@ -179,88 +200,120 @@ var (
 	HostSortUploadPrice        HostSort = "upload_price"
 )
 
-// WithAcceptingContracts sets the accepting contracts parameter for the host's query
-func (hf HostFilter) WithAcceptingContracts(accepting bool) {
-	hf["acceptcontracts"] = []string{strconv.FormatBool(accepting)}
+// HostFilterAcceptingContracts sets the accepting contracts parameter for the host's query
+func HostFilterAcceptingContracts(accepting bool) HostFilter {
+	return func(v url.Values) {
+		v.Set(acceptContractsParam, strconv.FormatBool(accepting))
+	}
 }
 
-// WithOnline sets the online parameter for the host's query
-func (hf HostFilter) WithOnline(online bool) {
-	hf["online"] = []string{strconv.FormatBool(online)}
+// HostFilterOnline sets the online parameter for the host's query
+func HostFilterOnline(online bool) HostFilter {
+	return func(v url.Values) {
+		v.Set(onlineParam, strconv.FormatBool(online))
+	}
 }
 
-// WithLimit sets the benchmark parameter for the host's query
-func (hf HostFilter) WithBenchmarked(benchmarked bool) {
-	hf["benchmarked"] = []string{strconv.FormatBool(benchmarked)}
+// HostFilterBenchmarked sets the benchmark parameter for the host's query
+func HostFilterBenchmarked(benchmarked bool) HostFilter {
+	return func(v url.Values) {
+		v.Set(benchmarkedParam, strconv.FormatBool(benchmarked))
+	}
 }
 
-// WithMinAge sets the min age for the host query
-func (hf HostFilter) WithMinAge(age uint64) {
-	hf["minage"] = []string{strconv.FormatUint(age, 10)}
+// HostFilterMinAge sets the min age for the host query
+func HostFilterMinAge(age uint64) HostFilter {
+	return func(v url.Values) {
+		v.Set(minAgeParam, strconv.FormatUint(age, 10))
+	}
 }
 
-// WithMinUptime sets the min uptime for the host query
-func (hf HostFilter) WithMinUptime(minUptime float64) {
-	hf["minuptime"] = []string{strconv.FormatFloat(minUptime, 'f', -1, 64)}
+// HostFilterMinUptime sets the min uptime for the host query
+func HostFilterMinUptime(minUptime float64) HostFilter {
+	return func(v url.Values) {
+		v.Set(minUptimeParam, strconv.FormatFloat(minUptime, 'f', -1, 64))
+	}
 }
 
-// WithMinDuration sets the min contract duration for the host query
-func (hf HostFilter) WithMinDuration(minDuration uint64) {
-	hf["minduration"] = []string{strconv.FormatUint(minDuration, 10)}
+// HostFilterMinDuration sets the min contract duration for the host query
+func HostFilterMinDuration(minDuration uint64) HostFilter {
+	return func(v url.Values) {
+		v.Set(minDurationParam, strconv.FormatUint(minDuration, 10))
+	}
 }
 
-// WithMinStorage sets the min available storage for the host query
-func (hf HostFilter) WithMinStorage(minStorage uint64) {
-	hf["minstorage"] = []string{strconv.FormatUint(minStorage, 10)}
+// HostFilterMinStorage sets the min available storage for the host query
+func HostFilterMinStorage(minStorage uint64) HostFilter {
+	return func(v url.Values) {
+		v.Set(minStorageParam, strconv.FormatUint(minStorage, 10))
+	}
 }
 
-// WithMinUploadSpeed sets the min upload speed for the host query
-func (hf HostFilter) WithMinUploadSpeed(minUploadSpeed uint64) {
-	hf["minuploadspeed"] = []string{strconv.FormatUint(minUploadSpeed, 10)}
+// HostFilterMinUploadSpeed sets the min upload speed for the host query
+func HostFilterMinUploadSpeed(minUploadSpeed uint64) HostFilter {
+	return func(v url.Values) {
+		v.Set(minUploadSpeedParam, strconv.FormatUint(minUploadSpeed, 10))
+	}
 }
 
-// WithMinDownloadSpeed sets the min download speed for the host query
-func (hf HostFilter) WithMinDownloadSpeed(minDownloadSpeed uint64) {
-	hf["mindownloadspeed"] = []string{strconv.FormatUint(minDownloadSpeed, 10)}
+// HostFilterMinDownloadSpeed sets the min download speed for the host query
+func HostFilterMinDownloadSpeed(minDownloadSpeed uint64) HostFilter {
+	return func(v url.Values) {
+		v.Set(minDownloadSpeedParam, strconv.FormatUint(minDownloadSpeed, 10))
+	}
 }
 
-// WithMaxStoragePrice sets the max storage price for the host query
-func (hf HostFilter) WithMaxStoragePrice(price types.Currency) {
-	hf["maxstorageprice"] = []string{price.String()}
+// HostFilterMaxStoragePrice sets the max storage price for the host query
+func HostFilterMaxStoragePrice(price types.Currency) HostFilter {
+	return func(v url.Values) {
+		v.Set(maxStoragePriceParam, price.String())
+	}
 }
 
-// WithMaxUploadPrice sets the max upload price for the host query
-func (hf HostFilter) WithMaxUploadPrice(price types.Currency) {
-	hf["maxuploadprice"] = []string{price.String()}
+// HostFilterMaxUploadPrice sets the max upload price for the host query
+func HostFilterMaxUploadPrice(price types.Currency) HostFilter {
+	return func(v url.Values) {
+		v.Set(maxUploadPriceParam, price.String())
+	}
 }
 
-// WithMaxDownloadPrice sets the max download price for the host query
-func (hf HostFilter) WithMaxDownloadPrice(price types.Currency) {
-	hf["maxdownloadprice"] = []string{price.String()}
+// HostFilterMaxDownloadPrice sets the max download price for the host query
+func HostFilterMaxDownloadPrice(price types.Currency) HostFilter {
+	return func(v url.Values) {
+		v.Set(maxDownloadPriceParam, price.String())
+	}
 }
 
-// WithMaxContractPrice sets the max contract price for the host query
-func (hf HostFilter) WithMaxContractPrice(price types.Currency) {
-	hf["maxcontractprice"] = []string{price.String()}
+// HostFilterMaxContractPrice sets the max contract price for the host query
+func HostFilterMaxContractPrice(price types.Currency) HostFilter {
+	return func(v url.Values) {
+		v.Set(maxContractPriceParam, price.String())
+	}
 }
 
-// WithMaxBaseRPCPrice sets the max base RPC price for the host query
-func (hf HostFilter) WithMaxBaseRPCPrice(price types.Currency) {
-	hf["maxbaserpcprice"] = []string{price.String()}
+// HostFilterMaxBaseRPCPrice sets the max base RPC price for the host query
+func HostFilterMaxBaseRPCPrice(price types.Currency) HostFilter {
+	return func(v url.Values) {
+		v.Set(maxBaseRPCPriceParam, price.String())
+	}
 }
 
-// WithSectorAccessPrice sets the sector access price for the host query
-func (hf HostFilter) WithSectorAccessPrice(price types.Currency) {
-	hf["maxsectoraccessprice"] = []string{price.String()}
+// HostFilterSectorAccessPrice sets the sector access price for the host query
+func HostFilterSectorAccessPrice(price types.Currency) HostFilter {
+	return func(v url.Values) {
+		v.Set(maxSectorAccessPriceParam, price.String())
+	}
 }
 
-// WithSort sets the sort order for the host's query
-func (hf HostFilter) WithSort(field HostSort, desc bool) {
-	hf["sort"] = []string{string(field)}
-	if desc {
-		hf["dir"] = []string{"desc"}
-	} else {
-		hf["dir"] = []string{"asc"}
+// HostFilterSort sets the sort order for the host's query
+func HostFilterSort(field HostSort, desc bool) HostFilter {
+	return func(v url.Values) {
+		v.Set(sortParam, string(field))
+		if desc {
+			v.Set(dirParam, "desc")
+		} else {
+			v.Set(dirParam, "asc")
+		}
 	}
 }
 
@@ -287,7 +340,7 @@ func (a *APIClient) GetNetworkAverages() (settings HostConfig, rhp3Bench AvgHost
 }
 
 // GetActiveHosts gets all Sia hosts that have been successfully scanned in the last 24 hours
-func (a *APIClient) GetActiveHosts(filter HostFilter, page, limit int) (hosts []HostDetails, err error) {
+func (a *APIClient) GetActiveHosts(page, limit int, filters ...HostFilter) (hosts []HostDetails, err error) {
 	var resp getHostsResp
 
 	if page < 0 {
@@ -299,8 +352,8 @@ func (a *APIClient) GetActiveHosts(filter HostFilter, page, limit int) (hosts []
 	}
 
 	values := make(url.Values)
-	for k, v := range filter {
-		values[k] = v
+	for _, v := range filters {
+		v(values)
 	}
 
 	values.Add("page", strconv.Itoa(page))
