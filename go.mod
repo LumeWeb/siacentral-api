@@ -2,7 +2,10 @@ module github.com/siacentral/apisdkgo
 
 go 1.19
 
-require go.sia.tech/siad v1.5.9
+require (
+	github.com/shopspring/decimal v1.3.1
+	go.sia.tech/siad v1.5.9
+)
 
 require (
 	github.com/aead/chacha20 v0.0.0-20180709150244-8b13a72661da // indirect
