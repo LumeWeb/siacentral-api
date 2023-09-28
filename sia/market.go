@@ -21,6 +21,17 @@ type (
 		Rates     map[string]map[string]decimal.Decimal `json:"rates"`
 		Timestamp time.Time                             `json:"timestamp"`
 	}
+
+	ExchangeRate struct {
+		Currency  string                     `json:"currency"`
+		Rates     map[string]decimal.Decimal `json:"rates"`
+		Timestamp time.Time                  `json:"timestamp"`
+	}
+
+	getYearHistoricalPriceResp struct {
+		APIResponse
+		Rates []ExchangeRate `json:"rates"`
+	}
 )
 
 // GetExchangeRate gets the current market exchange rate for Siacoin and Siafund
@@ -68,4 +79,27 @@ func (a *APIClient) GetHistoricalExchangeRate(timestamp time.Time) (map[string]f
 	}
 
 	return rates, nil
+}
+
+// GetYearExchangeRate gets the rates for a full calendar year
+func (a *APIClient) GetYearExchangeRate(timestamp time.Time) ([]ExchangeRate, error) {
+	var resp getYearHistoricalPriceResp
+
+	y, _, _ := timestamp.Date()
+	timestamp = time.Date(y, 1, 1, 0, 0, 0, 0, timestamp.Location())
+
+	v := url.Values{
+		"timestamp": []string{timestamp.Format(time.RFC3339)},
+	}
+
+	code, err := a.makeAPIRequest(http.MethodGet, "/market/exchange-rate/historical/year?"+v.Encode(), nil, &resp)
+	if err != nil {
+		return nil, err
+	}
+
+	if code < 200 || code >= 300 || resp.Type != "success" {
+		return nil, errors.New(resp.Message)
+	}
+
+	return resp.Rates, nil
 }
