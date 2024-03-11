@@ -1,4 +1,4 @@
-module github.com/siacentral/apisdkgo
+module github.com/LumeWeb/siacentral-api
 
 go 1.19
 
