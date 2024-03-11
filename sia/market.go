@@ -12,8 +12,8 @@ import (
 type (
 	getPriceResp struct {
 		APIResponse
-		Siacoin map[string]float64 `json:"siacoin"`
-		Siafund map[string]float64 `json:"siafund"`
+		Siacoin map[string]decimal.Decimal `json:"siacoin"`
+		Siafund map[string]decimal.Decimal `json:"siafund"`
 	}
 
 	getHistoricalPriceResp struct {
@@ -35,7 +35,7 @@ type (
 )
 
 // GetExchangeRate gets the current market exchange rate for Siacoin and Siafund
-func (a *APIClient) GetExchangeRate() (siacoin map[string]float64, siafund map[string]float64, err error) {
+func (a *APIClient) GetExchangeRate() (siacoin map[string]decimal.Decimal, siafund map[string]decimal.Decimal, err error) {
 	var resp getPriceResp
 
 	code, err := a.makeAPIRequest(http.MethodGet, "/market/exchange-rate", nil, &resp)
@@ -57,7 +57,7 @@ func (a *APIClient) GetExchangeRate() (siacoin map[string]float64, siafund map[s
 
 // GetHistoricalExchangeRate gets the historical market exchange rate for
 // Siacoins at the specified timestamp
-func (a *APIClient) GetHistoricalExchangeRate(timestamp time.Time) (map[string]float64, error) {
+func (a *APIClient) GetHistoricalExchangeRate(timestamp time.Time) (map[string]decimal.Decimal, error) {
 	var resp getHistoricalPriceResp
 
 	v := url.Values{
@@ -73,9 +73,9 @@ func (a *APIClient) GetHistoricalExchangeRate(timestamp time.Time) (map[string]f
 		return nil, errors.New(resp.Message)
 	}
 
-	rates := make(map[string]float64)
+	rates := make(map[string]decimal.Decimal)
 	for k, v := range resp.Rates["sc"] {
-		rates[k], _ = v.Float64()
+		rates[k] = v
 	}
 
 	return rates, nil
